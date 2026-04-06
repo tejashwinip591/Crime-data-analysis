@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Data Analysis Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🔍 Crime Data Analysis Dashboard</h1>
+                <p>Real-time crime statistics and trends analysis</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li><a href="#dashboard" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#trends" onclick="showSection('trends')">Trends</a></li>
+                <li><a href="#search" onclick="showSection('search')">Search</a></li>
+                <li><a href="#heatmap" onclick="showSection('heatmap')">Heatmap</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <h2>Crime Statistics Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCrimes">0</div>
+                        <div class="stat-label">Total Crimes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="solvedCases">0</div>
+                        <div class="stat-label">Solved Cases</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="solveRate">0%</div>
+                        <div class="stat-label">Solve Rate</div>
+                    </div>
+                    <div class="stat-card trending-down">
+                        <div class="stat-number">↓</div>
+                        <div class="stat-label">Trend: Decreasing</div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Crimes by Type</h3>
+                        <canvas id="crimeTypesChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Crime Distribution</h3>
+                        <canvas id="crimeDistributionChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trends Section -->
+            <section id="trends" class="content-section">
+                <h2>Crime Trends (2021-2024)</h2>
+                <div class="chart-container full-width">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Search Section -->
+            <section id="search" class="content-section">
+                <h2>Search Crime Data</h2>
+                
+                <!-- City Search -->
+                <div class="search-subsection">
+                    <h3>🏙️ Search by City</h3>
+                    <div class="search-container">
+                        <input 
+                            type="text" 
+                            id="cityInput" 
+                            placeholder="Enter city name (e.g., New York, Los Angeles, Delhi, Bangalore)..."
+                            class="search-input"
+                        >
+                        <button onclick="searchCity()" class="search-button">Search City</button>
+                    </div>
+                </div>
+
+                <!-- Age Group Search -->
+                <div class="search-subsection">
+                    <h3>👥 Search by Age Group</h3>
+                    <div class="search-container">
+                        <select id="ageGroupSelect" class="search-input">
+                            <option value="">Select Age Group...</option>
+                            <option value="0-17">Children & Teenagers (0-17)</option>
+                            <option value="18-25">Young Adults (18-25)</option>
+                            <option value="26-35">Adults (26-35)</option>
+                            <option value="36-50">Middle-Aged (36-50)</option>
+                            <option value="51-65">Senior Adults (51-65)</option>
+                            <option value="65+">Elderly (65+)</option>
+                            <option value="all">All Age Groups</option>
+                        </select>
+                        <button onclick="searchByAge()" class="search-button">Search Age Group</button>
+                    </div>
+                </div>
+
+                <div id="searchResults" class="search-results"></div>
+            </section>
+
+            <!-- Heatmap Section -->
+            <section id="heatmap" class="content-section">
+                <h2>Crime Intensity Heatmap - India</h2>
+                <div class="heatmap-wrapper">
+                    <div id="crimeMap" class="crime-map"></div>
+                    <div class="heatmap-legend">
+                        <h4>Crime Intensity</h4>
+                        <div class="legend-item">
+                            <div class="legend-color intensity-low"></div>
+                            <span>Low</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color intensity-medium"></div>
+                            <span>Medium</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color intensity-high"></div>
+                            <span>High</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="heatmap-list">
+                    <h3>Crime Data by Location</h3>
+                    <div id="heatmapData" class="heatmap-data"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Crime Data Analysis. Data sources: FBI Crime Data API</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
